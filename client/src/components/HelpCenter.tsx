@@ -23,6 +23,13 @@ interface Question {
   answer: string;
 }
 
+// Configurações de contato
+const CONTACT_CONFIG = {
+  whatsapp: '+5511999999999', // Substituir com número real
+  email: 'suporte@portovale.com.br',
+  phone: '+55 (XX) XXXX-XXXX',
+};
+
 const THEMES: Theme[] = [
   {
     id: 'tickets',
@@ -125,16 +132,32 @@ const getAllQuestions = (): (Question & { themeId: string; themeName: string })[
   );
 };
 
-export default function HelpCenter() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+// Carregar mensagens do localStorage
+const loadMessagesFromStorage = (): Message[] => {
+  try {
+    const stored = localStorage.getItem('helpCenterMessages');
+    if (stored) {
+      return JSON.parse(stored).map((msg: any) => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp),
+      }));
+    }
+  } catch (e) {
+    console.error('Erro ao carregar mensagens:', e);
+  }
+  return [
     {
       id: '1',
       type: 'bot',
       text: 'Olá! 👋 Bem-vindo à Central de Ajuda Porto Vale. Como posso ajudá-lo hoje?',
       timestamp: new Date(),
     },
-  ]);
+  ];
+};
+
+export default function HelpCenter() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>(loadMessagesFromStorage());
   const [currentView, setCurrentView] = useState<'themes' | 'questions' | 'chat' | 'search'>('themes');
   const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
   const [userInput, setUserInput] = useState('');
@@ -202,7 +225,11 @@ export default function HelpCenter() {
       text: `Ótimo! Você selecionou "${theme.name}". Qual é sua dúvida?`,
       timestamp: new Date(),
     };
-    setMessages([...messages, botMessage]);
+    setMessages((prev) => {
+      const updated = [...prev, botMessage];
+      localStorage.setItem('helpCenterMessages', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const handleQuestionSelect = (question: Question) => {
@@ -220,7 +247,11 @@ export default function HelpCenter() {
       timestamp: new Date(),
     };
 
-    setMessages([...messages, userMessage, botMessage]);
+    setMessages((prev) => {
+      const updated = [...prev, userMessage, botMessage];
+      localStorage.setItem('helpCenterMessages', JSON.stringify(updated));
+      return updated;
+    });
     setCurrentView('chat');
   };
 
@@ -249,7 +280,11 @@ export default function HelpCenter() {
       timestamp: new Date(),
     };
 
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => {
+      const updated = [...prev, userMessage];
+      localStorage.setItem('helpCenterMessages', JSON.stringify(updated));
+      return updated;
+    });
     setUserInput('');
 
     // Simulate bot response
@@ -260,7 +295,11 @@ export default function HelpCenter() {
         text: 'Obrigado pela sua pergunta! Parece que não encontrei uma resposta direta para isso. Gostaria de abrir um ticket ou falar com um analista?',
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, botMessage]);
+      setMessages((prev) => {
+        const updated = [...prev, botMessage];
+        localStorage.setItem('helpCenterMessages', JSON.stringify(updated));
+        return updated;
+      });
     }, 500);
   };
 
@@ -269,7 +308,7 @@ export default function HelpCenter() {
   };
 
   const handleWhatsApp = () => {
-    const phoneNumber = '5511999999999'; // Substituir com número real
+    const phoneNumber = CONTACT_CONFIG.whatsapp.replace(/\D/g, '');
     const message = encodeURIComponent('Olá, preciso de ajuda com a Central de Ajuda Porto Vale.');
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
   };
@@ -285,7 +324,11 @@ export default function HelpCenter() {
       text: 'Voltamos aos temas. Como posso ajudá-lo?',
       timestamp: new Date(),
     };
-    setMessages([...messages, botMessage]);
+    setMessages((prev) => {
+      const updated = [...prev, botMessage];
+      localStorage.setItem('helpCenterMessages', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   return (
