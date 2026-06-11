@@ -29,11 +29,15 @@ export default function Home() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-blue-600 font-bold">✓</span>
-                  <span>Temas em cascata (7 categorias)</span>
+                  <span>Temas em cascata (8 categorias)</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-blue-600 font-bold">✓</span>
-                  <span>Perguntas e respostas rápidas</span>
+                  <span>40 perguntas e respostas pré-configuradas</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span>Busca por palavras-chave</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-blue-600 font-bold">✓</span>
@@ -59,6 +63,7 @@ export default function Home() {
                 <li>📊 Relatórios e Análises</li>
                 <li>🔐 Configurações da Conta</li>
                 <li>🛠️ Problemas Técnicos</li>
+                <li>🔗 Integração e APIs</li>
                 <li>💳 Faturamento</li>
               </ul>
             </div>
@@ -73,7 +78,7 @@ export default function Home() {
               </li>
               <li className="flex gap-4">
                 <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</span>
-                <span>Selecione um tema de sua dúvida</span>
+                <span>Selecione um tema ou use a busca para encontrar respostas rápidas</span>
               </li>
               <li className="flex gap-4">
                 <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</span>
